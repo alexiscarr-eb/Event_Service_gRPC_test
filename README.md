@@ -2,7 +2,7 @@
 
 This is NOT Event Service. 
 
-This is proto-Event Service playground (see what I did there?). 
+This is a proto-Event Service playground (see what I did there?). 
 
 Only very simple endpoints with a scaled down proto will be implemented. Just to get a feel for what developing in gRPC and Kotlin with gradle is like. 
 
