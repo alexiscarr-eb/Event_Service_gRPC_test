@@ -33,7 +33,7 @@ message UpdateEventResponse {
   string id = 1;
   string eventName = 2;
   string eventDescription = 3;
-  string edited = 4;
+  string updated = 4;
 }
 
 message GetEventsRequest {
