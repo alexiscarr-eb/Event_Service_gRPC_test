@@ -67,7 +67,7 @@ protobuf {
     protoc {
         artifact = "com.google.protobuf:protoc:$protobufVersion"
     }
-    generatedFilesBaseDir = "$projectDir/src/main/kotlin/com/eventbrite/eventservice"
+    generatedFilesBaseDir = "$projectDir/src/main/kotlin/com/eventbrite/eventservice/generated_proto"
     plugins {
         id("grpc") {
             artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion"
