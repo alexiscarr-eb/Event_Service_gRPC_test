@@ -92,7 +92,6 @@ tasks.withType<Test> {
 
 application {
     mainClass.set("com.eventbrite.eventservice.server.EventServiceServerKt")
-    mainClass.set("com.eventbrite.eventservice.client.MainClientKt") // ask Liam for help
 }
 
 tasks.register<JavaExec>("EventServiceClient") {
@@ -111,4 +110,3 @@ val otherStartScripts = tasks.register<CreateStartScripts>("otherStartScripts") 
 tasks.named("startScripts") {
     dependsOn(otherStartScripts)
 }
-
