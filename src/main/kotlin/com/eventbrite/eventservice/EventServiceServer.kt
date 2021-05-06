@@ -58,7 +58,6 @@ class EventServiceServer(private val port: Int) {
             return GetEventsResponse
                 .newBuilder()
                 .setId(request.id)
-                .setEdited("edited")
                 .build()
         }
     }
