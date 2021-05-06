@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package com.eventbrite.eventservice;
+
+option java_multiple_files = true;
+
+service EventService {
+  rpc CreateEvent (CreateEventRequest) returns (CreateResponse) {}
+  rpc UpdateEvent (UpdateEventRequest) returns (UpdateEventResponse) {}
+  rpc GetEvents (GetEventsRequest) returns (GetEventsResponse) {}
+}
+
+message CreateEventRequest {
+  string id = 1;
+  string eventName = 2;
+  string eventDescription = 3;
+}
+
+message CreateResponse {
+  string id = 1;
+  string eventName = 2;
+  string eventDescription = 3;
+  string created = 4;
+}
+
+message UpdateEventRequest {
+  string id = 1;
+  string eventName = 2;
+  string eventDescription = 3;
+}
+
+message UpdateEventResponse {
+  string id = 1;
+  string eventName = 2;
+  string eventDescription = 3;
+  string edited = 4;
+}
+
+message GetEventsRequest {
+  string id = 1;
+}
+
+message GetEventsResponse {
+  string id = 1;
+  string eventName = 2;
+  string eventDescription = 3;
+}

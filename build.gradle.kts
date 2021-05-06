@@ -1,71 +1,120 @@
-import com.google.protobuf.gradle.*
-import org.gradle.kotlin.dsl.provider.gradleKotlinDslOf
+import com.google.protobuf.gradle.generateProtoTasks
+import com.google.protobuf.gradle.id
+import com.google.protobuf.gradle.ofSourceSet
+import com.google.protobuf.gradle.plugins
+import com.google.protobuf.gradle.protobuf
+import com.google.protobuf.gradle.protoc
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+val grpcVersion = "1.34.0"
+val grpcKotlinVersion = "1.0.0"
+val protobufVersion = "3.14.0"
+val coroutinesVersion = "1.4.2"
+val kotestVersion = "4.4.3"
 
 plugins {
-    java
+    application
     idea
-    kotlin("jvm") version "1.4.32"
-    id("com.google.protobuf") version "0.8.8"
+    kotlin("jvm") version "1.4.31"
+    id("com.google.protobuf") version "0.8.14"
+    kotlin("plugin.spring") version "1.3.61"
+    id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
+    id("org.springframework.boot") version "2.4.5"
+    id("io.spring.dependency-management") version "1.0.8.RELEASE"
 }
 
-group = "org.example"
-version = "1.0-SNAPSHOT"
-
 repositories {
+    mavenLocal()
+    google()
+    jcenter()
+    mavenCentral()
     maven("https://plugins.gradle.org/m2/")
 }
 
 sourceSets{
     create("sample"){
         proto {
-            srcDir("src/sample/protobuf")
+            srcDir("src/main/proto/samples")
         }
     }
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
-
-    compile("com.google.protobuf:protobuf-java:3.6.1")
-    compile("io.grpc:grpc-stub:1.15.1")
-    compile("io.grpc:grpc-protobuf:1.15.1")
-    if (JavaVersion.current().isJava9Compatible) {
-        // Workaround for @javax.annotation.Generated
-        // see: https://github.com/grpc/grpc-java/issues/3633
-        compile("javax.annotation:javax.annotation-api:1.3.1")
-    }
-
-
-    // Adding dependency for configuration from custom sourceSet
-    "sampleProtobuf"(files("ext/"))
-
-    testCompile("junit:junit:4.12")
+    implementation(kotlin("stdlib-jdk8"))
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("javax.annotation:javax.annotation-api:1.3.2")
+    implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation(platform("software.amazon.awssdk:bom:2.15.22"))
+    implementation("software.amazon.awssdk:dynamodb-enhanced")
+    runtimeOnly("io.grpc:grpc-netty-shaded:$grpcVersion")
+    testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
+    testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_7
+idea {
+    module {
+        generatedSourceDirs.add(file("build/generated/source/proto/main/grpc"))
+        generatedSourceDirs.add(file("build/generated/source/proto/main/grpckt"))
+        generatedSourceDirs.add(file("build/generated/source/proto/main/java"))
+    }
 }
 
 protobuf {
     protoc {
-        // The artifact spec for the Protobuf Compiler
-        artifact = "com.google.protobuf:protoc:3.6.1"
+        artifact = "com.google.protobuf:protoc:$protobufVersion"
     }
     plugins {
-        // Optional: an artifact spec for a protoc plugin, with "grpc" as
-        // the identifier, which can be referred to in the "plugins"
-        // container of the "generateProtoTasks" closure.
         id("grpc") {
-            artifact = "io.grpc:protoc-gen-grpc-java:1.15.1"
+            artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion"
+        }
+        id("grpckt") {
+            artifact = "io.grpc:protoc-gen-grpc-kotlin:$grpcKotlinVersion:jdk7@jar"
         }
     }
     generateProtoTasks {
         ofSourceSet("main").forEach {
             it.plugins {
-                // Apply the "grpc" plugin whose spec is defined above, without options.
                 id("grpc")
+                id("grpckt")
             }
         }
     }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "11"
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
+application {
+    mainClass.set("com.eventbrite.eventservice.EventServiceServerKt")
+}
+
+tasks.register<JavaExec>("EventServiceClient") {
+    dependsOn("classes")
+    classpath = sourceSets["main"].runtimeClasspath
+    main = "com.eventbrite.eventservice.EventServiceClientKt"
+}
+
+val otherStartScripts = tasks.register<CreateStartScripts>("otherStartScripts") {
+    mainClassName = "com.eventbrite.eventservice.EventServiceClientKt"
+    applicationName = "EventServiceClientKt"
+    outputDir = tasks.named<CreateStartScripts>("startScripts").get().outputDir
+    classpath = tasks.named<CreateStartScripts>("startScripts").get().classpath
+}
+
+tasks.named("startScripts") {
+    dependsOn(otherStartScripts)
 }
 
