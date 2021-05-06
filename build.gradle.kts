@@ -91,7 +91,8 @@ tasks.withType<Test> {
 }
 
 application {
-    mainClass.set("com.eventbrite.eventservice.EventServiceServerKt")
+    mainClass.set("com.eventbrite.eventservice.server.EventServiceServerKt")
+    mainClass.set("com.eventbrite.eventservice.client.MainClientKt") // ask Liam for help
 }
 
 tasks.register<JavaExec>("EventServiceClient") {

@@ -6,7 +6,7 @@ option java_multiple_files = true;
 
 service EventService {
   rpc CreateEvent (CreateEventRequest) returns (CreateResponse) {}
-  rpc UpdateEvent (UpdateEventRequest) returns (UpdateEventResponse) {}
+  rpc UpdateEvent (UpdateEventRequest) returns (UpdateEventResponse) {} // use google.protobuf.Empty in the future
   rpc GetEvents (GetEventsRequest) returns (GetEventsResponse) {}
 }
 
