@@ -40,6 +40,7 @@ class EventServiceServer(private val port: Int) {
                 .build()
         }
 
+
         override suspend fun updateEvent(request: UpdateEventRequest) : UpdateEventResponse {
             return UpdateEventResponse
                 .newBuilder()
@@ -57,6 +58,7 @@ class EventServiceServer(private val port: Int) {
             return GetEventsResponse
                 .newBuilder()
                 .setId(request.id)
+                .setEdited("edited")
                 .build()
         }
     }
