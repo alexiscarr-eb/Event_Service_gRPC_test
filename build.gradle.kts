@@ -31,14 +31,6 @@ repositories {
     maven("https://plugins.gradle.org/m2/")
 }
 
-sourceSets{
-    create("sample"){
-        proto {
-            srcDir("src/main/proto/samples")
-        }
-    }
-}
-
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -67,7 +59,7 @@ protobuf {
     protoc {
         artifact = "com.google.protobuf:protoc:$protobufVersion"
     }
-    generatedFilesBaseDir = "$projectDir/src/main/kotlin/com/eventbrite/eventservice/generated_proto"
+
     plugins {
         id("grpc") {
             artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion"
