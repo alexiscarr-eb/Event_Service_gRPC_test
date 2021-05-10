@@ -11,25 +11,18 @@ val grpcKotlinVersion = "1.0.0"
 val protobufVersion = "3.14.0"
 val coroutinesVersion = "1.4.2"
 val kotestVersion = "4.4.3"
+val jacksonVersion = "2.12.3"
 
 plugins {
     idea
-    kotlin("jvm") version "1.4.31"
-    id("com.google.protobuf") version "0.8.14"
-    id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
-}
-
-repositories {
-    mavenLocal()
-    google()
-    jcenter()
-    mavenCentral()
-    maven("https://plugins.gradle.org/m2/")
+    kotlin("jvm")
+    id("com.google.protobuf")
+    id("org.jlleitschuh.gradle.ktlint")
 }
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.3")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("javax.annotation:javax.annotation-api:1.3.2")
     implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
