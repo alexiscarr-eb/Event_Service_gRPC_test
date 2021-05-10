@@ -14,5 +14,5 @@ dependencyResolutionManagement {
 
 //include("client")
 include("proto")
-//include("server")
+include("server")
 
