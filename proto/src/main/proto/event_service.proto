@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package com.eventbrite.eventservice;
+package com.eventbrite.eventservice.proto;
 
 option java_multiple_files = true;
 
