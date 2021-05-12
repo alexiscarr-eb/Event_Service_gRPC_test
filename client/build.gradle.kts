@@ -22,15 +22,12 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation(platform("software.amazon.awssdk:bom:2.15.22"))
-    implementation("software.amazon.awssdk:dynamodb-enhanced")
     runtimeOnly("io.grpc:grpc-netty-shaded:$grpcVersion")
-    testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
 }
 
 application {
-    mainClass.set("com.eventbrite.eventservice.server.EventServiceServerKt")
+    mainClass.set("com.eventbrite.eventservice.client.MainClientKt")
 }
 
 java {
